@@ -1,18 +1,16 @@
-RST=python $(S)/ms/tools/rst.py
+RST=$(S)/ms/tools/rst.py -H
 
-rst: documentation.py documentation3.py
-	python $(S)/ms/tools/minidoc.py -d documentation.py
-	python3.3 $(S)/minidoc3.py -d documentation3.py
+rst: src/tests/documentation.py
+	PYTHONPATH=src:$(S) $(S)/ms/tools/minidoc.py -d tests.documentation
 
-html: /tmp/documentation.rst /tmp/documentation3.rst
-	$(RST) /tmp/documentation.rst
-	$(RST) /tmp/documentation3.rst
-	rst2html README.txt index.html
+html: /tmp/tests.documentation.rst docs/README.rst
+	$(RST) /tmp/tests.documentation.rst
+	$(RST) docs/README.rst
+	mv docs/README.html docs/index.html
+	mv /tmp/tests.documentation.html docs/documentation.html
 
-pdf: /tmp/documentation.rst /tmp/documentation3.rst
-	rst2pdf /tmp/documentation.rst -o documentation.pdf
-	rst2pdf /tmp/documentation3.rst -o documentation3.pdf
-	cp /tmp/documentation.html /tmp/documentation3.html .
+pdf: /tmp/tests.documentation.rst
+	rst2pdf /tmp/tests.documentation.rst -o documentation.pdf
 
-upload: documentation.pdf documentation3.pdf
-	python3.3 setup.py register sdist upload 
+upload: documentation.pdf docs/index.html
+	python3 setup.py register sdist bdist_wheel upload upload_docs

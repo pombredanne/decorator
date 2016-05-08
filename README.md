@@ -1,4 +1,3 @@
-decorator
-=========
+[See the real README](docs/README.rst)
 
-decorator
+[![Build Status](https://secure.travis-ci.org/micheles/decorator.png?branch=master)](https://travis-ci.org/micheles/decorator)
